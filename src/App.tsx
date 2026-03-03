@@ -11,7 +11,7 @@ import MaintenanceForm from './components/MaintenanceForm';
 import MaintenanceThankYou from './components/MaintenanceThankYou';
 
 export default function App() {
-  const [flow, setFlow] = useState<'solar' | 'maintenance'>('maintenance');
+  const [flow, setFlow] = useState<'solar' | 'maintenance'>('solar');
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleFlowChange = (newFlow: 'solar' | 'maintenance') => {

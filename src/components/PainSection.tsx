@@ -16,22 +16,26 @@ export default function PainSection() {
   const formatCurrency = (value: number) =>
     new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(value);
 
-  const chartData = useMemo(() => {
+  const { chartData, cumulativeGrid } = useMemo(() => {
     const data = [];
-    let cumulativeGrid = 0;
-    let cumulativeSolar = monthlyBill * 40;
+    let cumulative = 0;
 
     for (let i = 0; i <= years; i++) {
-      if (i === 0) {
-        data.push({ year: `Ano ${i}`, grid: 0, solar: cumulativeSolar });
-      } else {
-        const yearlyGridCost = monthlyBill * 12 * Math.pow(1.08, i - 1);
-        cumulativeGrid += yearlyGridCost;
-        cumulativeSolar += monthlyBill * 40 * 0.01;
-        data.push({ year: `Ano ${i}`, grid: Math.round(cumulativeGrid), solar: Math.round(cumulativeSolar) });
+      const currentMonthlyGrid = monthlyBill * Math.pow(1.08, i);
+      // Fatura com solar geralmente é apenas a taxa mínima de conexão (estimada em ~10% do valor)
+      const currentMonthlySolar = monthlyBill * 0.10;
+
+      data.push({
+        year: `Ano ${i}`,
+        grid: Math.round(currentMonthlyGrid),
+        solar: Math.round(currentMonthlySolar)
+      });
+
+      if (i > 0) {
+        cumulative += (monthlyBill * Math.pow(1.08, i - 1)) * 12;
       }
     }
-    return data;
+    return { chartData: data, cumulativeGrid: Math.round(cumulative) };
   }, [monthlyBill, years]);
 
   const painCards = [
@@ -126,7 +130,7 @@ export default function PainSection() {
               <div className="bg-[#0A0F1E] rounded-2xl p-6 border border-white/5 text-center relative flex flex-col justify-center">
                 <span className="text-xs md:text-sm font-medium text-red-400 uppercase tracking-widest mb-2 block">Dinheiro Queimado (Sem Solar)</span>
                 <div className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-red-400 to-orange-600 tracking-tighter">
-                  {formatCurrency(chartData[chartData.length - 1].grid)}
+                  {formatCurrency(cumulativeGrid)}
                 </div>
                 <p className="text-[10px] md:text-xs text-slate-500 font-sans mt-2">
                   *Considerando inflação energética média de 8% a.a.
@@ -139,11 +143,11 @@ export default function PainSection() {
               <div className="absolute top-0 left-0 right-0 flex justify-between items-center mb-4 z-10 px-2">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-red-500" />
-                  <span className="text-xs font-medium text-slate-300">Custo Concessionária</span>
+                  <span className="text-xs font-medium text-slate-300">Conta Mensal (Sem Solar)</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-quark-green" />
-                  <span className="text-xs font-medium text-slate-300">Investimento Solar</span>
+                  <span className="text-xs font-medium text-slate-300">Conta Mensal (Com Solar)</span>
                 </div>
               </div>
 
@@ -174,8 +178,8 @@ export default function PainSection() {
                     formatter={(value: number) => formatCurrency(value)}
                     labelStyle={{ color: '#94a3b8', marginBottom: '4px' }}
                   />
-                  <Area type="monotone" dataKey="grid" name="Concessionária" stroke="#ef4444" strokeWidth={3} fillOpacity={1} fill="url(#colorGrid)" />
-                  <Area type="monotone" dataKey="solar" name="Energia Solar" stroke="#00D26A" strokeWidth={3} fillOpacity={1} fill="url(#colorSolar)" />
+                  <Area type="monotone" dataKey="grid" name="Sem Solar" stroke="#ef4444" strokeWidth={3} fillOpacity={1} fill="url(#colorGrid)" />
+                  <Area type="monotone" dataKey="solar" name="Com Solar" stroke="#00D26A" strokeWidth={3} fillOpacity={1} fill="url(#colorSolar)" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
