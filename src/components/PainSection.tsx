@@ -186,23 +186,22 @@ export default function PainSection() {
           </div>
         </motion.div>
 
-        {/* Pain Cards */}
         <div className="grid md:grid-cols-3 gap-4 md:gap-6">
           {painCards.map((card, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              whileHover={{ y: -4 }}
+              whileHover={{ y: -8, scale: 1.02 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
-              className="bg-white/[0.02] border border-white/[0.05] p-6 md:p-10 rounded-3xl md:rounded-[2rem] hover:bg-white/[0.04] transition-colors cursor-default"
+              className="bg-white/[0.02] border border-white/[0.05] p-6 md:p-10 rounded-3xl md:rounded-[2rem] hover:bg-white/[0.05] hover:border-red-500/20 hover:shadow-[0_0_40px_rgba(239,68,68,0.1)] transition-all duration-300 cursor-default group"
             >
-              <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br from-red-500/20 to-orange-500/5 flex items-center justify-center mb-6 md:mb-8 border border-red-500/20 shadow-inner">
+              <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br from-red-500/10 to-orange-500/5 flex items-center justify-center mb-6 md:mb-8 border border-red-500/20 group-hover:from-red-500/30 transition-all duration-300">
                 {card.icon}
               </div>
-              <h3 className="text-xl md:text-2xl font-bold tracking-tight mb-3 md:mb-4">{card.title}</h3>
-              <p className="text-sm md:text-base text-slate-400 leading-relaxed font-sans">{card.desc}</p>
+              <h3 className="text-xl md:text-2xl font-bold tracking-tight mb-3 md:mb-4 group-hover:text-red-400 transition-colors">{card.title}</h3>
+              <p className="text-sm md:text-base text-slate-400 leading-relaxed font-medium">{card.desc}</p>
             </motion.div>
           ))}
         </div>

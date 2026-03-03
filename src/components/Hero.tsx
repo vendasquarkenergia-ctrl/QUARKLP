@@ -32,8 +32,12 @@ export default function Hero() {
         />
       ))}
 
-      {/* Background glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-quark-green/10 blur-[120px] rounded-full pointer-events-none" />
+      {/* Background glow dinâmico "Breathing Effect" */}
+      <motion.div
+        animate={{ scale: [1, 1.15, 1], opacity: [0.35, 0.5, 0.35] }}
+        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-br from-quark-green/10 to-quark-yellow/5 blur-[120px] rounded-full pointer-events-none"
+      />
 
       <div className="flex-1 flex items-center justify-center px-4 md:px-6 pt-28 pb-20 md:py-32">
         <div className="max-w-4xl mx-auto text-center relative z-10">
@@ -42,20 +46,27 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="inline-flex items-center gap-2 px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-6 md:mb-8">
-              <Zap className="w-3.5 h-3.5 md:w-4 md:h-4 text-quark-yellow" />
-              <span className="text-xs md:text-sm font-medium tracking-wide text-slate-300 uppercase">Liberdade Energética</span>
-            </div>
+            {/* Badge Premium */}
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              className="inline-flex items-center gap-2 px-4 md:px-5 py-2 rounded-full bg-white/[0.03] border border-white/10 backdrop-blur-xl mb-6 md:mb-8 shadow-[inset_0_0_20px_rgba(255,255,255,0.02)] cursor-default group"
+            >
+              <Zap className="w-4 h-4 text-quark-yellow group-hover:text-quark-green transition-colors" />
+              <span className="text-xs md:text-sm font-bold tracking-widest text-[#E2E8F0] uppercase">
+                O Fim da Conta de Luz
+              </span>
+            </motion.div>
 
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight mb-6 md:mb-8 leading-[1.1]">
-              Sua conta de luz não precisa ser um{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-quark-yellow to-quark-green">
-                aluguel eterno.
+            <h1 className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter mb-6 md:mb-8 leading-[1.05]">
+              Sua energia não <br className="hidden md:block" />
+              precisa ser um{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-quark-yellow via-quark-green to-[#00A855] drop-shadow-sm">
+                aluguel.
               </span>
             </h1>
 
-            <p className="text-base sm:text-lg md:text-2xl text-slate-400 mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed font-sans px-2">
-              Todo ano a mesma história: a tarifa sobe e você paga a conta. Assuma o controle da sua energia e pare de financiar o lucro da concessionária.
+            <p className="text-lg sm:text-xl md:text-2xl text-slate-400 mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed font-medium px-2">
+              Todo mês a mesma história: a tarifa aumenta e você apenas paga. Assuma hoje o controle e pare de financiar o lucro da concessionária.
             </p>
 
             {/* Social Proof */}
