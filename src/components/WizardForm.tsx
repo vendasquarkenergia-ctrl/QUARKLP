@@ -27,27 +27,16 @@ export default function WizardForm({ onSubmit }: WizardFormProps) {
     setIsAnalyzing(true);
 
     try {
-      const leadId = crypto.randomUUID();
-      const leadData = {
-        id: leadId,
-        name: formData.name || 'Não informado',
-        phone: formData.whatsapp || 'Não informado',
-        city: formData.situation?.split(',')[0] || formData.situation || 'Não informado',
-        value: formData.situation?.split(',')[1] || 'Não informado', // Extraindo do campo cidade, valor
-        consumption: formData.problem || 'Não informado',
-        status: 'Novos Leads',
-        source: 'Landing Page Quark - Solar',
-        service: formData.service || 'Orçamento de Energia Solar',
-        pain_points: formData.implication || 'Não informado',
-        payoff: formData.needPayoff || 'Não informado',
-        createdAt: new Date().toISOString()
-      };
-
-      await supabase.from('leads').insert([
+      await supabase.from('landing_page_leads').insert([
         {
-          id: leadId,
-          data: leadData,
-          updated_at: new Date().toISOString()
+          name: formData.name || 'Não informado',
+          whatsapp: formData.whatsapp || 'Não informado',
+          flow_type: 'solar',
+          service: formData.service || 'Orçamento de Energia Solar',
+          city_and_bill: formData.situation || 'Não informado',
+          roof_and_plans: formData.problem || 'Não informado',
+          pain_points: formData.implication || 'Não informado',
+          payoff: formData.needPayoff || 'Não informado'
         }
       ]);
     } catch (error) {

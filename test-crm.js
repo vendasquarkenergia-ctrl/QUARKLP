@@ -8,22 +8,16 @@ async function testCRMLead() {
     console.log('Enviando Lead de Teste para o CRM (Tabela leads)...');
 
     const leadId = crypto.randomUUID();
-    const leadData = {
-        id: leadId,
-        name: "Lead de Teste IA",
-        phone: "82 999999999",
-        city: "Maceió",
-        value: "100",  // para ficar na formatação
-        consumption: "500 kWh",
-        status: "Novos Leads",
-        source: "Teste de Integração"
-    };
-
-    const { error } = await supabase.from('leads').insert([
+    const { error } = await supabase.from('landing_page_leads').insert([
         {
-            id: leadId,
-            data: leadData,
-            updated_at: new Date().toISOString()
+            name: "Lead de Teste IA",
+            whatsapp: "82 999999999",
+            flow_type: 'solar',
+            service: 'Orçamento de Energia Solar',
+            city_and_bill: 'Maceió, 500',
+            roof_and_plans: 'Telhado comum',
+            pain_points: 'Preço alto',
+            payoff: 'Garantia'
         }
     ]);
 

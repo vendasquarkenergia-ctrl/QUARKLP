@@ -26,27 +26,15 @@ export default function MaintenanceForm({ onSubmit }: MaintenanceFormProps) {
     setIsAnalyzing(true);
 
     try {
-      const leadId = crypto.randomUUID();
-      const leadData = {
-        id: leadId,
-        name: formData.name || 'Não informado',
-        phone: formData.whatsapp || 'Não informado',
-        city: 'Não informado',
-        value: 'Manutenção',
-        consumption: formData.structure || 'Não informado',
-        status: 'Novos Leads',
-        source: 'Landing Page Quark - Manutenção',
-        last_maintenance: formData.last_maintenance || 'Não informado',
-        symptoms: formData.symptoms || 'Não informado',
-        property_type: formData.urgency || 'Não informado',
-        createdAt: new Date().toISOString()
-      };
-
-      await supabase.from('leads').insert([
+      await supabase.from('landing_page_leads').insert([
         {
-          id: leadId,
-          data: leadData,
-          updated_at: new Date().toISOString()
+          name: formData.name || 'Não informado',
+          whatsapp: formData.whatsapp || 'Não informado',
+          flow_type: 'maintenance',
+          last_maintenance: formData.last_maintenance || 'Não informado',
+          symptoms: formData.symptoms || 'Não informado',
+          inverter_and_panels: formData.structure || 'Não informado',
+          property_type: formData.urgency || 'Não informado'
         }
       ]);
     } catch (error) {
