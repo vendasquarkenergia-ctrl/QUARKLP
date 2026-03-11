@@ -4,7 +4,7 @@ import { WHATSAPP_URL, INSTAGRAM_URL } from '../lib/constants';
 
 export default function MaintenanceThankYou() {
   return (
-    <section className="min-h-screen flex items-center justify-center px-4 md:px-6 py-24 relative overflow-hidden bg-[#0A0F1E]">
+    <section className="min-h-[100svh] flex items-center justify-center px-4 md:px-6 py-24 relative overflow-hidden bg-transparent">
       {/* Background glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-quark-green/5 blur-[150px] rounded-full pointer-events-none" />
 

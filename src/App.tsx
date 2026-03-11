@@ -20,7 +20,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-quark-dark text-slate-50 font-sans selection:bg-quark-green selection:text-quark-dark flex flex-col relative">
+    <div className="min-h-screen bg-quark-darker text-slate-50 font-sans flex flex-col relative">
       <Header flow={flow} setFlow={handleFlowChange} />
 
       {flow === 'solar' ? (

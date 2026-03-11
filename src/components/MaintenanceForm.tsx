@@ -26,17 +26,32 @@ export default function MaintenanceForm({ onSubmit }: MaintenanceFormProps) {
     setIsAnalyzing(true);
 
     try {
-      await supabase.from('landing_page_leads').insert([
-        {
-          name: formData.name || 'Não informado',
-          whatsapp: formData.whatsapp || 'Não informado',
-          flow_type: 'maintenance',
-          last_maintenance: formData.last_maintenance || 'Não informado',
-          symptoms: formData.symptoms || 'Não informado',
-          inverter_and_panels: formData.structure || 'Não informado',
-          property_type: formData.urgency || 'Não informado'
-        }
-      ]);
+      const newLeadId = crypto.randomUUID();
+      const leadData = {
+        id: newLeadId,
+        name: formData.name || 'Não informado',
+        phone: formData.whatsapp || 'Não informado',
+        city: 'Não informado',
+        value: 0,
+        monthlyConsumption: 0,
+        status: 'Lead',
+        assignee: 'Sistema',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        history: [{
+          id: Date.now().toString(),
+          action: 'Criação',
+          details: `Lead cadastrado via Landing Page (Manutenção). Tipo: ${formData.urgency || 'Não informado'}. Última manutenção: ${formData.last_maintenance || 'Não informado'}. Sintomas: ${formData.symptoms || 'Não informado'}. Inversor/Painéis: ${formData.structure || 'Não informado'}.`,
+          timestamp: new Date().toISOString(),
+          author: 'Landing Page'
+        }]
+      };
+
+      await supabase.from('leads').upsert({
+        id: newLeadId,
+        data: leadData,
+        updated_at: new Date().toISOString()
+      });
     } catch (error) {
       console.error('Erro ao salvar lead de manutenção:', error);
     }
@@ -106,13 +121,13 @@ export default function MaintenanceForm({ onSubmit }: MaintenanceFormProps) {
   ];
 
   return (
-    <section id="maintenance-form" className="py-20 md:py-32 px-4 md:px-6 relative bg-[#0A0F1E]">
+    <section id="maintenance-form" className="py-24 md:py-32 px-4 md:px-6 relative bg-transparent">
       <div className="max-w-3xl mx-auto">
         {!isAnalyzing && (
           <StepProgress currentStep={step} totalSteps={steps.length} stepLabel="Etapa" />
         )}
 
-        <div className="bg-[#161B22] border border-white/5 rounded-2xl md:rounded-3xl p-6 md:p-12 shadow-2xl relative overflow-hidden min-h-[400px] flex flex-col justify-center">
+        <div className="bg-white/[0.02] border border-white/[0.05] rounded-3xl md:rounded-[2.5rem] p-6 md:p-12 shadow-[0_8px_32px_rgba(0,0,0,0.3)] backdrop-blur-xl relative overflow-hidden min-h-[400px] flex flex-col justify-center">
           <AnimatePresence mode="wait">
             {isAnalyzing ? (
               <AnalysisLoader
@@ -156,11 +171,11 @@ export default function MaintenanceForm({ onSubmit }: MaintenanceFormProps) {
                       placeholder={currentStep.placeholder}
                       value={formData[currentStep.id] || ''}
                       onChange={(e) => updateData(currentStep.id, e.target.value)}
-                      className="w-full bg-[#0A0F1E] border border-white/10 rounded-xl p-4 md:p-5 text-base md:text-lg focus:outline-none focus:border-quark-green focus:ring-1 focus:ring-quark-green transition-all resize-none text-white placeholder:text-slate-600 font-sans"
+                      className="w-full bg-white/[0.02] border border-white/10 rounded-2xl p-4 md:p-6 text-base md:text-lg focus:outline-none focus:border-quark-green/50 focus:ring-1 focus:ring-quark-green/50 transition-all resize-none text-white placeholder:text-slate-500 font-sans"
                     />
                     <button
                       type="submit"
-                      className="flex items-center justify-center gap-2 w-full md:w-auto px-6 md:px-8 py-4 rounded-xl bg-white text-[#0A0F1E] font-bold text-sm md:text-base hover:bg-quark-green hover:text-[#0A0F1E] transition-colors cursor-pointer"
+                      className="flex items-center justify-center gap-2 w-full md:w-auto px-8 md:px-10 py-4 md:py-5 rounded-2xl bg-white text-black font-bold text-base md:text-lg hover:bg-white/90 transition-colors cursor-pointer"
                     >
                       Próxima Etapa <ArrowRight className="w-4 h-4" />
                     </button>
@@ -176,7 +191,7 @@ export default function MaintenanceForm({ onSubmit }: MaintenanceFormProps) {
                         placeholder="Seu Nome Completo"
                         value={formData.name || ''}
                         onChange={(e) => updateData('name', e.target.value)}
-                        className="w-full bg-[#0A0F1E] border border-white/10 rounded-xl p-4 md:p-5 text-base md:text-lg focus:outline-none focus:border-quark-green transition-all text-white placeholder:text-slate-600 font-sans"
+                        className="w-full bg-white/[0.02] border border-white/10 rounded-2xl p-4 md:p-6 text-base md:text-lg focus:outline-none focus:border-quark-green/50 transition-all text-white placeholder:text-slate-500 font-sans"
                       />
                       <input
                         type="tel"
@@ -184,12 +199,12 @@ export default function MaintenanceForm({ onSubmit }: MaintenanceFormProps) {
                         placeholder="Seu WhatsApp (com DDD)"
                         value={formData.whatsapp || ''}
                         onChange={(e) => updateData('whatsapp', e.target.value)}
-                        className="w-full bg-[#0A0F1E] border border-white/10 rounded-xl p-4 md:p-5 text-base md:text-lg focus:outline-none focus:border-quark-green transition-all text-white placeholder:text-slate-600 font-sans"
+                        className="w-full bg-white/[0.02] border border-white/10 rounded-2xl p-4 md:p-6 text-base md:text-lg focus:outline-none focus:border-quark-green/50 transition-all text-white placeholder:text-slate-500 font-sans"
                       />
                     </div>
                     <button
                       type="submit"
-                      className="flex items-center justify-center gap-2 md:gap-3 w-full px-6 md:px-8 py-4 md:py-5 rounded-xl bg-quark-green text-[#0A0F1E] font-bold text-base md:text-lg hover:bg-[#00e676] transition-colors cursor-pointer"
+                      className="flex items-center justify-center gap-2 md:gap-3 w-full px-8 md:px-10 py-4 md:py-5 rounded-2xl bg-gradient-to-r from-quark-yellow to-quark-green text-quark-dark font-bold text-base md:text-lg shadow-[0_0_30px_rgba(0,210,106,0.2)] hover:shadow-[0_0_50px_rgba(0,210,106,0.4)] transition-all cursor-pointer"
                     >
                       <CheckCircle2 className="w-5 h-5" />
                       Receber Diagnóstico Prévio

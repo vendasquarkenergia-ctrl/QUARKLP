@@ -27,18 +27,32 @@ export default function WizardForm({ onSubmit }: WizardFormProps) {
     setIsAnalyzing(true);
 
     try {
-      await supabase.from('landing_page_leads').insert([
-        {
-          name: formData.name || 'Não informado',
-          whatsapp: formData.whatsapp || 'Não informado',
-          flow_type: 'solar',
-          service: formData.service || 'Orçamento de Energia Solar',
-          city_and_bill: formData.situation || 'Não informado',
-          roof_and_plans: formData.problem || 'Não informado',
-          pain_points: formData.implication || 'Não informado',
-          payoff: formData.needPayoff || 'Não informado'
-        }
-      ]);
+      const newLeadId = crypto.randomUUID();
+      const leadData = {
+        id: newLeadId,
+        name: formData.name || 'Não informado',
+        phone: formData.whatsapp || 'Não informado',
+        city: formData.situation || 'Não informado',
+        value: 0,
+        monthlyConsumption: 0,
+        status: 'Lead',
+        assignee: 'Sistema',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        history: [{
+          id: Date.now().toString(),
+          action: 'Criação',
+          details: `Lead cadastrado via Landing Page (Orçamento). Serviço: ${formData.service || 'Não informado'}. Problema: ${formData.problem || 'Não informado'}. Dor: ${formData.implication || 'Não informado'}. Expectativa: ${formData.needPayoff || 'Não informado'}.`,
+          timestamp: new Date().toISOString(),
+          author: 'Landing Page'
+        }]
+      };
+
+      await supabase.from('leads').upsert({
+        id: newLeadId,
+        data: leadData,
+        updated_at: new Date().toISOString()
+      });
     } catch (error) {
       console.error('Erro ao salvar lead no Supabase:', error);
       // Silencioso para não travar a experiência do usuário
@@ -114,7 +128,7 @@ export default function WizardForm({ onSubmit }: WizardFormProps) {
   const canGoBack = !isAnalyzing && step > 0 && step < steps.length - 1 && currentStep.type !== 'choice';
 
   return (
-    <section id="wizard-form" className="py-20 md:py-32 px-4 md:px-6 relative bg-[#030911]">
+    <section id="wizard-form" className="py-24 md:py-32 px-4 md:px-6 relative bg-transparent">
       <div className="max-w-3xl mx-auto">
         {!isAnalyzing && (
           <StepProgress currentStep={step} totalSteps={steps.length} />
@@ -168,7 +182,7 @@ export default function WizardForm({ onSubmit }: WizardFormProps) {
                         placeholder={currentStep.placeholder}
                         value={formData[currentStep.id] || ''}
                         onChange={(e) => updateData(currentStep.id, e.target.value)}
-                        className="w-full bg-black/40 border border-white/10 rounded-2xl p-4 md:p-6 text-base md:text-xl focus:outline-none focus:border-quark-green focus:ring-1 focus:ring-quark-green transition-all text-white placeholder:text-slate-600 font-sans"
+                        className="w-full bg-white/[0.02] border border-white/10 rounded-2xl p-4 md:p-6 text-base md:text-lg focus:outline-none focus:border-quark-green/50 focus:ring-1 focus:ring-quark-green/50 transition-all text-white placeholder:text-slate-500 font-sans"
                       />
                     ) : (
                       <textarea
@@ -178,7 +192,7 @@ export default function WizardForm({ onSubmit }: WizardFormProps) {
                         placeholder={currentStep.placeholder}
                         value={formData[currentStep.id] || ''}
                         onChange={(e) => updateData(currentStep.id, e.target.value)}
-                        className="w-full bg-black/40 border border-white/10 rounded-2xl p-4 md:p-6 text-base md:text-xl focus:outline-none focus:border-quark-green focus:ring-1 focus:ring-quark-green transition-all resize-none text-white placeholder:text-slate-600 font-sans"
+                        className="w-full bg-white/[0.02] border border-white/10 rounded-2xl p-4 md:p-6 text-base md:text-lg focus:outline-none focus:border-quark-green/50 focus:ring-1 focus:ring-quark-green/50 transition-all resize-none text-white placeholder:text-slate-500 font-sans"
                       />
                     )}
                     <div className="flex items-center gap-3">
@@ -210,7 +224,7 @@ export default function WizardForm({ onSubmit }: WizardFormProps) {
                         placeholder="Seu Nome Completo"
                         value={formData.name || ''}
                         onChange={(e) => updateData('name', e.target.value)}
-                        className="w-full bg-black/40 border border-white/10 rounded-2xl p-4 md:p-6 text-base md:text-xl focus:outline-none focus:border-quark-green transition-all text-white placeholder:text-slate-600 font-sans"
+                        className="w-full bg-white/[0.02] border border-white/10 rounded-2xl p-4 md:p-6 text-base md:text-lg focus:outline-none focus:border-quark-green/50 transition-all text-white placeholder:text-slate-500 font-sans"
                       />
                       <input
                         type="tel"
@@ -218,7 +232,7 @@ export default function WizardForm({ onSubmit }: WizardFormProps) {
                         placeholder="Seu WhatsApp (com DDD)"
                         value={formData.whatsapp || ''}
                         onChange={(e) => updateData('whatsapp', e.target.value)}
-                        className="w-full bg-black/40 border border-white/10 rounded-2xl p-4 md:p-6 text-base md:text-xl focus:outline-none focus:border-quark-green transition-all text-white placeholder:text-slate-600 font-sans"
+                        className="w-full bg-white/[0.02] border border-white/10 rounded-2xl p-4 md:p-6 text-base md:text-lg focus:outline-none focus:border-quark-green/50 transition-all text-white placeholder:text-slate-500 font-sans"
                       />
                     </div>
                     <button

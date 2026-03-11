@@ -1,108 +1,97 @@
 import { motion } from 'motion/react';
-import { Zap, ShieldCheck, ChevronDown } from 'lucide-react';
-
-// Partículas estáticas definidas fora do componente para evitar re-cálculo
-const PARTICLES = Array.from({ length: 40 }, (_, i) => ({
-  id: i,
-  top: `${Math.random() * 100}%`,
-  left: `${Math.random() * 100}%`,
-  size: Math.random() < 0.5 ? 1 : 2,
-  delay: Math.random() * 4,
-  duration: 3 + Math.random() * 4,
-  opacity: 0.15 + Math.random() * 0.35,
-}));
+import { ShieldCheck, ArrowRight, Zap } from 'lucide-react';
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex flex-col overflow-hidden">
-      {/* Partículas animadas */}
-      {PARTICLES.map((p) => (
-        <motion.div
-          key={p.id}
-          className="absolute rounded-full bg-white pointer-events-none"
-          style={{
-            top: p.top,
-            left: p.left,
-            width: p.size,
-            height: p.size,
-            opacity: p.opacity,
-          }}
-          animate={{ opacity: [p.opacity, p.opacity * 0.2, p.opacity] }}
-          transition={{ duration: p.duration, delay: p.delay, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      ))}
-
-      {/* Background glow dinâmico "Breathing Effect" */}
+    <section className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden">
+      {/* Background dark gradient e Glow central dinâmico */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,#0a101a_0%,transparent_80%)] pointer-events-none" />
+      
       <motion.div
-        animate={{ scale: [1, 1.15, 1], opacity: [0.35, 0.5, 0.35] }}
-        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-br from-quark-green/10 to-quark-yellow/5 blur-[120px] rounded-full pointer-events-none"
+        animate={{ scale: [1, 1.05, 1], opacity: [0.15, 0.25, 0.15] }}
+        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] md:w-[1000px] h-[300px] md:h-[500px] bg-quark-green blur-[150px] md:blur-[200px] rounded-[100%] pointer-events-none"
       />
 
-      <div className="flex-1 flex items-center justify-center px-4 md:px-6 pt-28 pb-20 md:py-32">
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 md:pt-40 md:pb-32 flex flex-col items-center text-center">
+        
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-8 md:mb-10 group cursor-pointer hover:bg-white/10 transition-colors"
+        >
+          <div className="w-2 h-2 rounded-full bg-quark-yellow animate-pulse" />
+          <span className="text-[11px] md:text-[13px] font-medium text-slate-300 group-hover:text-white transition-colors">
+            Conheça o novo padrão de energia solar 
+          </span>
+          <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-white transition-colors" />
+        </motion.div>
+
+        <motion.h1 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="text-5xl sm:text-7xl md:text-[5.5rem] font-bold tracking-tight text-white mb-6 md:mb-8 leading-[1.05] max-w-5xl"
+          style={{ letterSpacing: '-0.03em' }}
+        >
+          Sua energia não <br className="hidden sm:block" />
+          precisa ser um{' '}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-quark-green to-quark-yellow">
+            aluguel.
+          </span>
+        </motion.h1>
+
+        <motion.p 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="text-lg sm:text-xl md:text-2xl text-slate-400 mb-10 md:mb-12 max-w-2xl mx-auto leading-relaxed font-normal"
+        >
+          Assuma hoje o controle e pare de financiar o lucro da concessionária. A independência energética que você merece, com a tecnologia do amanhã.
+        </motion.p>
+
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
+        >
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => document.getElementById('wizard-form')?.scrollIntoView({ behavior: 'smooth' })}
+            className="group relative flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 bg-white text-quark-darker font-medium text-base md:text-lg rounded-full overflow-hidden cursor-pointer"
           >
-            {/* Badge Premium */}
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="inline-flex items-center gap-2 px-4 md:px-5 py-2 rounded-full bg-white/[0.03] border border-white/10 backdrop-blur-xl mb-6 md:mb-8 shadow-[inset_0_0_20px_rgba(255,255,255,0.02)] cursor-default group"
-            >
-              <Zap className="w-4 h-4 text-quark-yellow group-hover:text-quark-green transition-colors" />
-              <span className="text-xs md:text-sm font-bold tracking-widest text-[#E2E8F0] uppercase">
-                O Fim da Conta de Luz
-              </span>
-            </motion.div>
+            {/* Efeito Glow Interno */}
+            <div className="absolute inset-0 bg-gradient-to-r from-quark-green/20 to-quark-yellow/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <span className="relative z-10 font-bold">Simular Economia Agora</span>
+            <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
+          </motion.button>
 
-            <h1 className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter mb-6 md:mb-8 leading-[1.05]">
-              Sua energia não <br className="hidden md:block" />
-              precisa ser um{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-quark-yellow via-quark-green to-[#00A855] drop-shadow-sm">
-                aluguel.
-              </span>
-            </h1>
+          <button
+            onClick={() => document.getElementById('pain-section')?.scrollIntoView({ behavior: 'smooth' })}
+            className="flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 bg-transparent border border-white/20 text-white font-medium text-base md:text-lg rounded-full hover:bg-white/5 transition-colors cursor-pointer"
+          >
+            Ver como funciona
+          </button>
+        </motion.div>
 
-            <p className="text-lg sm:text-xl md:text-2xl text-slate-400 mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed font-medium px-2">
-              Todo mês a mesma história: a tarifa aumenta e você apenas paga. Assuma hoje o controle e pare de financiar o lucro da concessionária.
-            </p>
-
-            {/* Social Proof */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-quark-green/10 border border-quark-green/20 mb-10 md:mb-12"
-            >
-              <ShieldCheck className="w-4 h-4 text-quark-green shrink-0" />
-              <span className="text-xs md:text-sm font-semibold text-quark-green">
-                +1.200 sistemas instalados em todo o Brasil
-              </span>
-            </motion.div>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => document.getElementById('wizard-form')?.scrollIntoView({ behavior: 'smooth' })}
-                className="w-full sm:w-auto px-8 py-4 rounded-2xl md:rounded-full bg-gradient-to-r from-quark-yellow to-quark-green text-quark-dark font-bold text-lg shadow-[0_0_40px_rgba(0,210,106,0.3)] hover:shadow-[0_0_60px_rgba(0,210,106,0.5)] transition-all cursor-pointer"
-              >
-                Quero Minha Alforria
-              </motion.button>
-
-              <button
-                onClick={() => document.getElementById('pain-section')?.scrollIntoView({ behavior: 'smooth' })}
-                className="flex items-center gap-2 text-slate-400 hover:text-white text-sm font-medium transition-colors cursor-pointer group"
-              >
-                Ver como funciona
-                <ChevronDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
-              </button>
-            </div>
-          </motion.div>
-        </div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.7 }}
+          className="mt-16 flex items-center justify-center gap-6 opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500"
+        >
+           <div className="flex items-center gap-2 text-sm font-medium text-slate-300">
+             <ShieldCheck className="w-5 h-5 text-quark-green" />
+             <span>Mais de 1.200 sistemas confiados em todo o Brasil</span>
+           </div>
+        </motion.div>
       </div>
+      
+      {/* Decorative Bottom Line Fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
     </section>
   );
 }

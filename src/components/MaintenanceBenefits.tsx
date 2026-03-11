@@ -16,7 +16,7 @@ export default function MaintenanceBenefits() {
   };
 
   return (
-    <section className="py-20 md:py-28 px-4 md:px-6 bg-[#0A0F1E] relative border-y border-white/5">
+    <section className="py-24 md:py-32 px-4 md:px-6 bg-transparent relative border-t border-white/[0.02]">
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <motion.div
@@ -50,7 +50,7 @@ export default function MaintenanceBenefits() {
             variants={item}
             whileHover={{ y: -4 }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            className="md:col-span-8 bg-[#161B22] border border-white/5 p-6 md:p-10 rounded-3xl flex flex-col justify-between hover:bg-[#1c222b] hover:border-quark-green/10 transition-colors cursor-default"
+            className="md:col-span-8 bg-white/[0.02] border border-white/[0.05] p-6 md:p-10 rounded-3xl flex flex-col justify-between hover:bg-white/[0.04] hover:border-quark-green/20 backdrop-blur-xl transition-colors cursor-default"
           >
             <ShieldCheck className="w-8 h-8 md:w-10 md:h-10 text-quark-green mb-4 md:mb-6" />
             <div>
@@ -66,7 +66,7 @@ export default function MaintenanceBenefits() {
             variants={item}
             whileHover={{ y: -4 }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            className="md:col-span-4 bg-[#161B22] border border-white/5 p-6 md:p-10 rounded-3xl flex flex-col justify-between hover:bg-[#1c222b] hover:border-quark-yellow/10 transition-colors cursor-default"
+            className="md:col-span-4 bg-white/[0.02] border border-white/[0.05] p-6 md:p-10 rounded-3xl flex flex-col justify-between hover:bg-white/[0.04] hover:border-quark-yellow/20 backdrop-blur-xl transition-colors cursor-default"
           >
             <Zap className="w-8 h-8 md:w-10 md:h-10 text-quark-yellow mb-4 md:mb-6" />
             <div>
@@ -82,7 +82,7 @@ export default function MaintenanceBenefits() {
             variants={item}
             whileHover={{ y: -4 }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            className="md:col-span-4 bg-[#161B22] border border-white/5 p-6 md:p-10 rounded-3xl flex flex-col justify-between hover:bg-[#1c222b] hover:border-quark-green/10 transition-colors cursor-default"
+            className="md:col-span-4 bg-white/[0.02] border border-white/[0.05] p-6 md:p-10 rounded-3xl flex flex-col justify-between hover:bg-white/[0.04] hover:border-quark-green/20 backdrop-blur-xl transition-colors cursor-default"
           >
             <TrendingUp className="w-8 h-8 md:w-10 md:h-10 text-quark-green mb-4 md:mb-6" />
             <div>
@@ -98,7 +98,7 @@ export default function MaintenanceBenefits() {
             variants={item}
             whileHover={{ y: -4 }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            className="md:col-span-8 bg-[#161B22] border border-white/5 p-6 md:p-10 rounded-3xl flex flex-col justify-between hover:bg-[#1c222b] hover:border-quark-yellow/10 transition-colors cursor-default"
+            className="md:col-span-8 bg-white/[0.02] border border-white/[0.05] p-6 md:p-10 rounded-3xl flex flex-col justify-between hover:bg-white/[0.04] hover:border-quark-yellow/20 backdrop-blur-xl transition-colors cursor-default"
           >
             <Activity className="w-8 h-8 md:w-10 md:h-10 text-quark-yellow mb-4 md:mb-6" />
             <div>

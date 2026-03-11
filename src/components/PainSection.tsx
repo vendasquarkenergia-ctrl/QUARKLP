@@ -57,7 +57,7 @@ export default function PainSection() {
   ];
 
   return (
-    <section id="pain-section" className="py-20 md:py-32 px-4 md:px-6 bg-quark-dark relative border-y border-white/5">
+    <section id="pain-section" className="py-24 md:py-32 px-4 md:px-6 bg-transparent relative border-t border-white/[0.02]">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -66,9 +66,9 @@ export default function PainSection() {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="text-center mb-12 md:mb-16"
         >
-          <h2 className="text-3xl md:text-6xl font-extrabold tracking-tight mb-4 md:mb-6">
+          <h2 className="text-4xl md:text-[3.5rem] font-bold tracking-tight text-white mb-6 leading-[1.1]">
             Faça as contas de quanto você já{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">perdeu</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">perdeu.</span>
           </h2>
           <p className="text-base md:text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed font-sans">
             A conta de luz é um aluguel eterno que você paga para a concessionária. Descubra exatamente quanto dinheiro você já deixou na mesa.
@@ -81,9 +81,10 @@ export default function PainSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="max-w-5xl mx-auto bg-[#161B22] border border-white/10 rounded-3xl p-6 md:p-10 mb-16 md:mb-24 shadow-2xl relative overflow-hidden"
+          className="max-w-5xl mx-auto bg-white/[0.02] border border-white/[0.05] rounded-[32px] p-6 md:p-10 mb-16 md:mb-24 shadow-[0_8px_32px_rgba(0,0,0,0.3)] backdrop-blur-xl relative overflow-hidden focus-within:border-white/[0.1] transition-colors"
         >
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 to-orange-500" />
+          {/* Subtle top glow line */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[1px] bg-gradient-to-r from-transparent via-red-500/50 to-transparent" />
 
           <div className="grid lg:grid-cols-12 gap-8 md:gap-12 items-center">
             {/* Inputs */}
@@ -127,12 +128,13 @@ export default function PainSection() {
                 />
               </div>
 
-              <div className="bg-[#0A0F1E] rounded-2xl p-6 border border-white/5 text-center relative flex flex-col justify-center">
-                <span className="text-xs md:text-sm font-medium text-red-400 uppercase tracking-widest mb-2 block">Dinheiro Queimado (Sem Solar)</span>
-                <div className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-red-400 to-orange-600 tracking-tighter">
+              <div className="bg-[#050505]/50 backdrop-blur-sm rounded-2xl p-6 border border-white/[0.03] text-center relative flex flex-col justify-center overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent pointer-events-none" />
+                <span className="relative z-10 text-xs md:text-sm font-medium text-red-400 uppercase tracking-widest mb-2 block">Dinheiro Queimado (Sem Solar)</span>
+                <div className="relative z-10 text-3xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-red-400 to-orange-600 tracking-tighter">
                   {formatCurrency(cumulativeGrid)}
                 </div>
-                <p className="text-[10px] md:text-xs text-slate-500 font-sans mt-2">
+                <p className="relative z-10 text-[10px] md:text-xs text-slate-500 font-sans mt-3">
                   *Considerando inflação energética média de 8% a.a.
                 </p>
               </div>
