@@ -128,7 +128,7 @@ export default function WizardForm({ onSubmit }: WizardFormProps) {
   const canGoBack = !isAnalyzing && step > 0 && step < steps.length - 1 && currentStep.type !== 'choice';
 
   return (
-    <section id="wizard-form" className="py-24 md:py-32 px-4 md:px-6 relative bg-transparent">
+    <section id="wizard-form" className="py-16 md:py-32 px-4 md:px-6 relative bg-transparent">
       <div className="max-w-3xl mx-auto">
         {!isAnalyzing && (
           <StepProgress currentStep={step} totalSteps={steps.length} />
@@ -148,6 +148,7 @@ export default function WizardForm({ onSubmit }: WizardFormProps) {
             ) : (
               <motion.div
                 key={step}
+                layout
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
@@ -182,7 +183,7 @@ export default function WizardForm({ onSubmit }: WizardFormProps) {
                         placeholder={currentStep.placeholder}
                         value={formData[currentStep.id] || ''}
                         onChange={(e) => updateData(currentStep.id, e.target.value)}
-                        className="w-full bg-white/[0.02] border border-white/10 rounded-2xl p-4 md:p-6 text-base md:text-lg focus:outline-none focus:border-quark-green/50 focus:ring-1 focus:ring-quark-green/50 transition-all text-white placeholder:text-slate-500 font-sans"
+                        className="w-full bg-white/[0.02] border border-white/10 rounded-2xl p-5 md:p-6 text-base md:text-lg focus:outline-none focus:border-quark-green/50 focus:ring-1 focus:ring-quark-green/50 transition-all text-white placeholder:text-slate-500 font-sans"
                       />
                     ) : (
                       <textarea
@@ -192,7 +193,7 @@ export default function WizardForm({ onSubmit }: WizardFormProps) {
                         placeholder={currentStep.placeholder}
                         value={formData[currentStep.id] || ''}
                         onChange={(e) => updateData(currentStep.id, e.target.value)}
-                        className="w-full bg-white/[0.02] border border-white/10 rounded-2xl p-4 md:p-6 text-base md:text-lg focus:outline-none focus:border-quark-green/50 focus:ring-1 focus:ring-quark-green/50 transition-all resize-none text-white placeholder:text-slate-500 font-sans"
+                        className="w-full bg-white/[0.02] border border-white/10 rounded-2xl p-5 md:p-6 text-base md:text-lg focus:outline-none focus:border-quark-green/50 focus:ring-1 focus:ring-quark-green/50 transition-all resize-none text-white placeholder:text-slate-500 font-sans"
                       />
                     )}
                     <div className="flex items-center gap-3">
@@ -224,7 +225,7 @@ export default function WizardForm({ onSubmit }: WizardFormProps) {
                         placeholder="Seu Nome Completo"
                         value={formData.name || ''}
                         onChange={(e) => updateData('name', e.target.value)}
-                        className="w-full bg-white/[0.02] border border-white/10 rounded-2xl p-4 md:p-6 text-base md:text-lg focus:outline-none focus:border-quark-green/50 transition-all text-white placeholder:text-slate-500 font-sans"
+                        className="w-full bg-white/[0.02] border border-white/10 rounded-2xl p-5 md:p-6 text-base md:text-lg focus:outline-none focus:border-quark-green/50 transition-all text-white placeholder:text-slate-500 font-sans"
                       />
                       <input
                         type="tel"
@@ -232,7 +233,7 @@ export default function WizardForm({ onSubmit }: WizardFormProps) {
                         placeholder="Seu WhatsApp (com DDD)"
                         value={formData.whatsapp || ''}
                         onChange={(e) => updateData('whatsapp', e.target.value)}
-                        className="w-full bg-white/[0.02] border border-white/10 rounded-2xl p-4 md:p-6 text-base md:text-lg focus:outline-none focus:border-quark-green/50 transition-all text-white placeholder:text-slate-500 font-sans"
+                        className="w-full bg-white/[0.02] border border-white/10 rounded-2xl p-5 md:p-6 text-base md:text-lg focus:outline-none focus:border-quark-green/50 transition-all text-white placeholder:text-slate-500 font-sans"
                       />
                     </div>
                     <button

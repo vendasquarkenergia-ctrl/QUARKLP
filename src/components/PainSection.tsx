@@ -85,7 +85,7 @@ export default function PainSection() {
   ];
 
   return (
-    <section id="pain-section" className="py-24 md:py-32 px-4 md:px-6 bg-transparent relative border-t border-white/[0.02]">
+    <section id="pain-section" className="py-16 md:py-32 px-4 md:px-6 bg-transparent relative border-t border-white/[0.02]">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -109,7 +109,7 @@ export default function PainSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="max-w-5xl mx-auto bg-white/[0.02] border border-white/[0.05] rounded-[32px] p-6 md:p-10 mb-16 md:mb-24 shadow-[0_8px_32px_rgba(0,0,0,0.3)] backdrop-blur-xl relative overflow-hidden focus-within:border-white/[0.1] transition-colors"
+          className="max-w-5xl mx-auto bg-white/[0.02] border border-white/[0.05] rounded-[32px] p-5 md:p-10 mb-16 md:mb-24 shadow-[0_8px_32px_rgba(0,0,0,0.3)] backdrop-blur-xl relative overflow-hidden focus-within:border-white/[0.1] transition-colors"
         >
           {/* Subtle top glow line */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[1px] bg-gradient-to-r from-transparent via-red-500/50 to-transparent" />
@@ -140,7 +140,7 @@ export default function PainSection() {
                   />
                   {/* Thumb (bola) */}
                   <div
-                    className="absolute top-1/2 -translate-y-1/2 w-6 h-6 rounded-full -translate-x-1/2 shadow-[0_0_0_3px_rgba(250,204,21,0.25),0_0_18px_rgba(250,204,21,0.55)]"
+                    className="absolute top-1/2 -translate-y-1/2 w-8 h-8 md:w-6 md:h-6 rounded-full -translate-x-1/2 shadow-[0_0_0_3px_rgba(250,204,21,0.25),0_0_18px_rgba(250,204,21,0.55)]"
                     style={{
                       left: `${((monthlyBill - 100) / (5000 - 100)) * 100}%`,
                       background: 'radial-gradient(circle at 35% 35%, #fff 0%, #FACC15 55%, #e6a800 100%)'
@@ -168,7 +168,7 @@ export default function PainSection() {
                     style={{ width: `${((years - 1) / (25 - 1)) * 100}%` }}
                   />
                   <div
-                    className="absolute top-1/2 -translate-y-1/2 w-6 h-6 rounded-full -translate-x-1/2 shadow-[0_0_0_3px_rgba(250,204,21,0.25),0_0_18px_rgba(250,204,21,0.55)]"
+                    className="absolute top-1/2 -translate-y-1/2 w-8 h-8 md:w-6 md:h-6 rounded-full -translate-x-1/2 shadow-[0_0_0_3px_rgba(250,204,21,0.25),0_0_18px_rgba(250,204,21,0.55)]"
                     style={{
                       left: `${((years - 1) / (25 - 1)) * 100}%`,
                       background: 'radial-gradient(circle at 35% 35%, #fff 0%, #FACC15 55%, #e6a800 100%)'
@@ -285,7 +285,7 @@ export default function PainSection() {
               whileHover={{ y: -8, scale: 1.02 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
-              className="bg-white/[0.02] border border-white/[0.05] p-6 md:p-10 rounded-3xl md:rounded-[2rem] hover:bg-white/[0.05] hover:border-red-500/20 hover:shadow-[0_0_40px_rgba(239,68,68,0.1)] transition-all duration-300 cursor-default group"
+              className="bg-white/[0.02] border border-white/[0.05] p-5 md:p-10 rounded-3xl md:rounded-[2rem] hover:bg-white/[0.05] hover:border-red-500/20 hover:shadow-[0_0_40px_rgba(239,68,68,0.1)] transition-all duration-300 cursor-default group"
             >
               <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br from-red-500/10 to-orange-500/5 flex items-center justify-center mb-6 md:mb-8 border border-red-500/20 group-hover:from-red-500/30 transition-all duration-300">
                 {card.icon}

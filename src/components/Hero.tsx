@@ -10,11 +10,11 @@ export default function Hero() {
     offset: ["start start", "end start"]
   });
 
-  // Animação muito mais rápida: termina com apenas 15% de scroll da seção
-  const overlayOpacity = useTransform(scrollYProgress, [0, 0.15], [0, 1]);
-  // O conteúdo some ainda mais rápido para dar total foco à imagem (com 10% de scroll já some)
-  const contentY = useTransform(scrollYProgress, [0, 0.15], [0, 40]);
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.10], [1, 0]);
+  // Animação suavizada para dispositivos móveis: termina com 25% de scroll da seção
+  const overlayOpacity = useTransform(scrollYProgress, [0, 0.25], [0, 1]);
+  // O conteúdo some de forma mais gradual (com 20% de scroll)
+  const contentY = useTransform(scrollYProgress, [0, 0.25], [0, 40]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.20], [1, 0]);
 
   return (
     <section
@@ -52,7 +52,7 @@ export default function Hero() {
       {/* ── CONTEÚDO DE TEXTO ────────────────────────────────────── */}
       <motion.div
         style={{ y: contentY, opacity: contentOpacity }}
-        className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 md:pt-40 md:pb-32 flex flex-col items-center text-center"
+        className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 md:pt-40 md:pb-32 flex flex-col items-center text-center"
       >
         {/* Pill badge */}
         <motion.div
@@ -73,7 +73,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="text-5xl sm:text-7xl md:text-[5.5rem] font-bold tracking-tight text-white mb-6 md:mb-8 leading-[1.05] max-w-5xl drop-shadow-2xl"
+          className="text-4xl sm:text-6xl md:text-[5.5rem] font-bold tracking-tight text-white mb-6 md:mb-8 leading-[1.05] max-w-5xl drop-shadow-2xl"
           style={{ letterSpacing: '-0.03em' }}
         >
           Sua energia não{' '}
