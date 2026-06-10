@@ -16,14 +16,36 @@ export default function PainSection() {
   const formatCurrency = (value: number) =>
     new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(value);
 
-  const { chartData, cumulativeGrid } = useMemo(() => {
+  const { chartData, cumulativeGrid, cumulativeSolar, totalSavings } = useMemo(() => {
     const data = [];
-    let cumulative = 0;
+    let cumulativeGridTotal = 0;
+    let cumulativeSolarTotal = 0;
+
+    // Inflação energética: 4% a.a. (ANEEL histórico)
+    const INFLATION = 0.04;
+
+    // Tarifa média nacional cheia (geração + transmissão + distribuição + impostos)
+    // Usada para estimar o consumo em kWh a partir do valor da conta
+    const AVG_FULL_TARIFF = 0.85; // R$/kWh
+
+    // Fio B real (encargo de uso da rede de distribuição - TUSD)
+    const FIO_B_TARIFF = 0.2628; // R$/kWh
+
+    // CIP (Contribuição de Iluminação Pública) - estimativa residencial ~5% da conta
+    const CIP_RATE = 0.05;
+
+    // Estimativa de consumo mensal em kWh com base na conta atual
+    const estimatedKwh = monthlyBill / AVG_FULL_TARIFF;
+
+    // Conta mensal com solar = (Fio B × kWh) + CIP
+    // O solar elimina o custo de geração, mas o cliente continua usando a rede
+    const solarMonthlyBase = (FIO_B_TARIFF * estimatedKwh) + (monthlyBill * CIP_RATE);
 
     for (let i = 0; i <= years; i++) {
-      const currentMonthlyGrid = monthlyBill * Math.pow(1.08, i);
-      // Fatura com solar geralmente é apenas a taxa mínima de conexão (estimada em ~10% do valor)
-      const currentMonthlySolar = monthlyBill * 0.10;
+      // Sem solar: conta cresce com inflação energética
+      const currentMonthlyGrid = monthlyBill * Math.pow(1 + INFLATION, i);
+      // Com solar: Fio B + CIP também corrigidos pela mesma inflação
+      const currentMonthlySolar = solarMonthlyBase * Math.pow(1 + INFLATION, i);
 
       data.push({
         year: `Ano ${i}`,
@@ -32,10 +54,16 @@ export default function PainSection() {
       });
 
       if (i > 0) {
-        cumulative += (monthlyBill * Math.pow(1.08, i - 1)) * 12;
+        cumulativeGridTotal += (monthlyBill * Math.pow(1 + INFLATION, i - 1)) * 12;
+        cumulativeSolarTotal += (solarMonthlyBase * Math.pow(1 + INFLATION, i - 1)) * 12;
       }
     }
-    return { chartData: data, cumulativeGrid: Math.round(cumulative) };
+    return {
+      chartData: data,
+      cumulativeGrid: Math.round(cumulativeGridTotal),
+      cumulativeSolar: Math.round(cumulativeSolarTotal),
+      totalSavings: Math.round(cumulativeGridTotal - cumulativeSolarTotal)
+    };
   }, [monthlyBill, years]);
 
   const painCards = [
@@ -96,46 +124,106 @@ export default function PainSection() {
                 <h3 className="text-xl font-bold text-white">Calculadora de Perdas</h3>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <div className="flex justify-between items-end">
                   <label className="text-xs md:text-sm font-medium text-slate-400 uppercase tracking-wider">Valor médio da conta</label>
                   <span className="text-xl md:text-2xl font-bold text-white">{formatCurrency(monthlyBill)}</span>
                 </div>
-                <input
-                  type="range"
-                  min="100"
-                  max="5000"
-                  step="50"
-                  value={monthlyBill}
-                  onChange={(e) => setMonthlyBill(Number(e.target.value))}
-                  className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-quark-yellow"
-                />
+                {/* Slider customizado — trilha + thumb com alinhamento perfeito */}
+                <div className="relative h-7 flex items-center">
+                  {/* Trilha de fundo */}
+                  <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-1.5 rounded-full bg-white/10" />
+                  {/* Trilha de progresso amarela */}
+                  <div
+                    className="absolute top-1/2 -translate-y-1/2 h-1.5 rounded-full bg-gradient-to-r from-quark-yellow to-yellow-400"
+                    style={{ width: `${((monthlyBill - 100) / (5000 - 100)) * 100}%` }}
+                  />
+                  {/* Thumb (bola) */}
+                  <div
+                    className="absolute top-1/2 -translate-y-1/2 w-6 h-6 rounded-full -translate-x-1/2 shadow-[0_0_0_3px_rgba(250,204,21,0.25),0_0_18px_rgba(250,204,21,0.55)]"
+                    style={{
+                      left: `${((monthlyBill - 100) / (5000 - 100)) * 100}%`,
+                      background: 'radial-gradient(circle at 35% 35%, #fff 0%, #FACC15 55%, #e6a800 100%)'
+                    }}
+                  />
+                  {/* Input invisível por cima para capturar eventos */}
+                  <input
+                    type="range" min="100" max="5000" step="50" value={monthlyBill}
+                    onChange={(e) => setMonthlyBill(Number(e.target.value))}
+                    className="absolute inset-0 w-full opacity-0 cursor-pointer"
+                  />
+                </div>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <div className="flex justify-between items-end">
                   <label className="text-xs md:text-sm font-medium text-slate-400 uppercase tracking-wider">Projeção (Anos)</label>
                   <span className="text-xl md:text-2xl font-bold text-white">{years} {years === 1 ? 'ano' : 'anos'}</span>
                 </div>
-                <input
-                  type="range"
-                  min="1"
-                  max="25"
-                  step="1"
-                  value={years}
-                  onChange={(e) => setYears(Number(e.target.value))}
-                  className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-quark-yellow"
-                />
+                {/* Slider customizado — trilha + thumb com alinhamento perfeito */}
+                <div className="relative h-7 flex items-center">
+                  <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-1.5 rounded-full bg-white/10" />
+                  <div
+                    className="absolute top-1/2 -translate-y-1/2 h-1.5 rounded-full bg-gradient-to-r from-quark-yellow to-yellow-400"
+                    style={{ width: `${((years - 1) / (25 - 1)) * 100}%` }}
+                  />
+                  <div
+                    className="absolute top-1/2 -translate-y-1/2 w-6 h-6 rounded-full -translate-x-1/2 shadow-[0_0_0_3px_rgba(250,204,21,0.25),0_0_18px_rgba(250,204,21,0.55)]"
+                    style={{
+                      left: `${((years - 1) / (25 - 1)) * 100}%`,
+                      background: 'radial-gradient(circle at 35% 35%, #fff 0%, #FACC15 55%, #e6a800 100%)'
+                    }}
+                  />
+                  <input
+                    type="range" min="1" max="25" step="1" value={years}
+                    onChange={(e) => setYears(Number(e.target.value))}
+                    className="absolute inset-0 w-full opacity-0 cursor-pointer"
+                  />
+                </div>
               </div>
 
-              <div className="bg-[#050505]/50 backdrop-blur-sm rounded-2xl p-6 border border-white/[0.03] text-center relative flex flex-col justify-center overflow-hidden">
+              {/* Card Sem Solar */}
+              <div className="bg-[#050505]/50 backdrop-blur-sm rounded-2xl p-5 border border-white/[0.03] relative flex flex-col gap-3 overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent pointer-events-none" />
-                <span className="relative z-10 text-xs md:text-sm font-medium text-red-400 uppercase tracking-widest mb-2 block">Dinheiro Queimado (Sem Solar)</span>
-                <div className="relative z-10 text-3xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-red-400 to-orange-600 tracking-tighter">
+                <div className="relative z-10 flex items-center justify-between">
+                  <span className="text-xs font-semibold text-red-400 uppercase tracking-widest">Sem Solar</span>
+                  <div className="w-2 h-2 rounded-full bg-red-500" />
+                </div>
+                <div className="relative z-10 text-2xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-red-400 to-orange-600 tracking-tighter">
                   {formatCurrency(cumulativeGrid)}
                 </div>
-                <p className="relative z-10 text-[10px] md:text-xs text-slate-500 font-sans mt-3">
-                  *Considerando inflação energética média de 8% a.a.
+                <p className="relative z-10 text-[10px] text-slate-500 font-sans leading-relaxed">
+                  Tarifa + inflação energética de 4% a.a.
+                </p>
+              </div>
+
+              {/* Card Com Solar */}
+              <div className="bg-[#050505]/50 backdrop-blur-sm rounded-2xl p-5 border border-white/[0.03] relative flex flex-col gap-3 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-quark-green/5 to-transparent pointer-events-none" />
+                <div className="relative z-10 flex items-center justify-between">
+                  <span className="text-xs font-semibold text-quark-green uppercase tracking-widest">Com Solar</span>
+                  <div className="w-2 h-2 rounded-full bg-quark-green" />
+                </div>
+                <div className="relative z-10 text-2xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-quark-green to-emerald-300 tracking-tighter">
+                  {formatCurrency(cumulativeSolar)}
+                </div>
+                <p className="relative z-10 text-[10px] text-slate-500 font-sans leading-relaxed">
+                  Fio B R$ 0,2628/kWh + CIP — encargos obrigatórios mesmo com solar
+                </p>
+              </div>
+
+              {/* Card Economia */}
+              <div className="bg-[#050505]/50 backdrop-blur-sm rounded-2xl p-5 border border-quark-yellow/10 relative flex flex-col gap-3 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-quark-yellow/5 to-transparent pointer-events-none" />
+                <div className="relative z-10 flex items-center justify-between">
+                  <span className="text-xs font-semibold text-quark-yellow uppercase tracking-widest">Economia Total</span>
+                  <span className="text-xs font-bold text-quark-yellow">🔥</span>
+                </div>
+                <div className="relative z-10 text-2xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-quark-yellow to-orange-300 tracking-tighter">
+                  {formatCurrency(totalSavings)}
+                </div>
+                <p className="relative z-10 text-[10px] text-slate-500 font-sans leading-relaxed">
+                  Diferença em {years} {years === 1 ? 'ano' : 'anos'} com energia solar instalada
                 </p>
               </div>
             </div>
@@ -145,11 +233,11 @@ export default function PainSection() {
               <div className="absolute top-0 left-0 right-0 flex justify-between items-center mb-4 z-10 px-2">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-red-500" />
-                  <span className="text-xs font-medium text-slate-300">Conta Mensal (Sem Solar)</span>
+                  <span className="text-xs font-medium text-slate-300">Sem Solar</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-quark-green" />
-                  <span className="text-xs font-medium text-slate-300">Conta Mensal (Com Solar)</span>
+                  <span className="text-xs font-medium text-slate-300">Com Solar (Fio B + CIP)</span>
                 </div>
               </div>
 

@@ -33,35 +33,87 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
 }
 
-/* Cross-browser range input styling */
+/* ─── Premium Range Slider ─────────────────────────────── */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  /* Altura igual ao thumb para que ele fique CENTRALIZADO na trilha */
+  height: 28px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-radius: 9999px;
+  background: transparent;
+  outline: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+}
+
+/* Thumb – WebKit (Chrome, Safari, Edge) */
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 20px;
-  height: 20px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
-  background: var(--color-quark-yellow);
-  cursor: pointer;
-  border: 2px solid var(--color-quark-dark);
-  box-shadow: 0 0 8px rgba(250, 204, 21, 0.4);
+  background: radial-gradient(circle at 35% 35%, #fff 0%, var(--color-quark-yellow) 55%, #e6a800 100%);
+  cursor: grab;
+  border: 3px solid rgba(0,0,0,0.6);
+  box-shadow:
+    0 0 0 3px rgba(250,204,21,0.25),
+    0 0 18px rgba(250,204,21,0.55),
+    0 2px 8px rgba(0,0,0,0.5);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow:
+    0 0 0 5px rgba(250,204,21,0.30),
+    0 0 28px rgba(250,204,21,0.70),
+    0 4px 12px rgba(0,0,0,0.5);
+}
+
+input[type="range"]::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.22);
+}
+
+/* Thumb – Firefox */
 input[type="range"]::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
-  background: var(--color-quark-yellow);
-  cursor: pointer;
-  border: 2px solid var(--color-quark-dark);
-  box-shadow: 0 0 8px rgba(250, 204, 21, 0.4);
+  background: radial-gradient(circle at 35% 35%, #fff 0%, var(--color-quark-yellow) 55%, #e6a800 100%);
+  cursor: grab;
+  border: 3px solid rgba(0,0,0,0.6);
+  box-shadow:
+    0 0 0 3px rgba(250,204,21,0.25),
+    0 0 18px rgba(250,204,21,0.55);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
+input[type="range"]::-moz-range-thumb:hover {
+  transform: scale(1.15);
+}
+
+/* Track – WebKit */
 input[type="range"]::-webkit-slider-runnable-track {
   height: 6px;
   border-radius: 9999px;
 }
 
+/* Track – Firefox */
 input[type="range"]::-moz-range-track {
   height: 6px;
   border-radius: 9999px;
+  background: rgba(255,255,255,0.08);
 }
+
+input[type="range"]::-moz-range-progress {
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #FACC15, #e6a800);
+}
+
